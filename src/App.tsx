@@ -8,13 +8,28 @@ import Pagination from "@mui/material/Pagination";
 import axios from "axios";
 
 interface Movie {
-  totalResults: string;
+  Title: string;
+  Year: string;
+  Type: string;
+  imdbID: string;
 }
 
 interface SearchResults {
   Search: Movie[];
   totalResults: string;
+  Response: string;
+  Error?: string;
 }
+
+interface MainScreenContainerProps {
+  hasResults: boolean;
+}
+
+const MainScreenContainer = styled.div<MainScreenContainerProps>`
+  display: flex;
+  flex-direction: column;
+  height: ${(props) => (props.hasResults ? "100vh" : "50vh")};
+`;
 
 const ViewContainer = styled.div`
   display: flex;
@@ -53,6 +68,10 @@ const SearchIcon = styled.img`
   width: 25px;
 `;
 
+const ResultsContainer = styled.div``;
+
+const ResultCard = styled.div``;
+
 function App() {
   const [search, setSearch] = useState<string | null>(null);
   const [results, setResults] = useState<SearchResults | null>(null);
@@ -60,26 +79,33 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchMovieData = async (title: string, page: number = 1) => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `https://www.omdbapi.com/?s=${title}&page=${page}&apikey=acd962bb`
       );
 
-      console.log(response.data);
+      // console.log(response.data);
 
       setResults(response.data);
       setError(null); // Clear any previous errors
     } catch (err) {
-      setError("Error fetching data. Please try again.");
-      setResults(null);
+      if (axios.isAxiosError(err)) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
     }
   };
-  useEffect(() => {
-    // console.log(results);
-  }, [results]);
+
+  // useEffect(() => {
+  //   console.log(results);
+  // }, [results]);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      // console.log(event.target.value);
       fetchMovieData((event.target as HTMLInputElement).value);
     }
   };
@@ -87,8 +113,9 @@ function App() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     if (search) fetchMovieData(search, value);
   };
+
   return (
-    <>
+    <MainScreenContainer hasResults={!!results}>
       <ViewContainer>
         <Header>OMDb Search API</Header>
         <SearchContainer>
@@ -101,14 +128,34 @@ function App() {
           />
         </SearchContainer>
       </ViewContainer>
-      {results && (
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        results && (
+          <>
+            {results.Response === "True" ? (
+              <ResultsContainer>
+                {results.Search.map((result) => (
+                  <ResultCard key={result.imdbID}>{result.Title}</ResultCard>
+                ))}
+              </ResultsContainer>
+            ) : (
+              <p>{results.Error}</p>
+            )}
+          </>
+        )
+      )}
+
+      {results && parseInt(results.totalResults) > 1 && (
         <Pagination
+          style={{ margin: "auto", marginBottom: "50px" }}
           count={Math.round(parseInt(results.totalResults) / 10)}
           shape="rounded"
           onChange={handleChange}
         />
       )}
-    </>
+    </MainScreenContainer>
   );
 }
 
