@@ -1,11 +1,12 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { color } from "./theme";
-import searchIcon from "./images/icons/search.svg";
 
 import Pagination from "@mui/material/Pagination";
 import axios from "axios";
+import { Search } from "./components/search";
+import { SearchResults } from "./components/searchResults";
 
 interface Movie {
   Title: string;
@@ -42,41 +43,10 @@ const Header = styled.h2`
   font-weight: 600;
 `;
 
-const SearchContainer = styled.div`
-  position: relative;
-  width: 50%;
-  height: 60px;
-  margin: 0 auto;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  box-sizing: border-box;
-  background-color: ${color.white};
-  border: none;
-  color: ${color.foreground};
-  height: 44px;
-  outline: 0;
-  border-radius: 50px;
-  padding-left: 40px;
-`;
-
-const SearchIcon = styled.img`
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 25px;
-`;
-
-const ResultsContainer = styled.div``;
-
-const ResultCard = styled.div``;
-
 function App() {
   const [search, setSearch] = useState<string | null>(null);
   const [results, setResults] = useState<SearchResults | null>(null);
   const [loading, setLoading] = useState<boolean | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchMovieData = async (title: string, page: number = 1) => {
     setLoading(true);
@@ -84,25 +54,13 @@ function App() {
       const response = await axios.get(
         `https://www.omdbapi.com/?s=${title}&page=${page}&apikey=acd962bb`
       );
-
-      // console.log(response.data);
-
       setResults(response.data);
-      setError(null); // Clear any previous errors
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setError(err.message);
-      } else {
-        setError("An unexpected error occurred");
-      }
+      console.log(err);
     } finally {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   console.log(results);
-  // }, [results]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -114,19 +72,15 @@ function App() {
     if (search) fetchMovieData(search, value);
   };
 
+  useEffect(() => {
+    console.log(results);
+  }, [results]);
+
   return (
     <MainScreenContainer hasResults={!!results}>
       <ViewContainer>
         <Header>OMDb Search API</Header>
-        <SearchContainer>
-          <SearchIcon src={searchIcon} />
-          <SearchInput
-            type="text"
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Search"
-          />
-        </SearchContainer>
+        <Search handleKeyDown={handleKeyDown} setSearch={setSearch} />
       </ViewContainer>
 
       {loading ? (
@@ -135,11 +89,7 @@ function App() {
         results && (
           <>
             {results.Response === "True" ? (
-              <ResultsContainer>
-                {results.Search.map((result) => (
-                  <ResultCard key={result.imdbID}>{result.Title}</ResultCard>
-                ))}
-              </ResultsContainer>
+              <SearchResults Search={results.Search} />
             ) : (
               <p>{results.Error}</p>
             )}
