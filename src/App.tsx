@@ -15,7 +15,7 @@ interface Movie {
   imdbID: string;
 }
 
-interface SearchResults {
+export interface SearchResults {
   Search: Movie[];
   totalResults: string;
   Response: string;
@@ -37,14 +37,14 @@ const ViewContainer = styled.div`
   flex-direction: column;
 `;
 
-const Header = styled.h2`
+const Header = styled.h2<MainScreenContainerProps>`
   color: ${color.white};
-  font-size: 3rem;
+  font-size: ${(props) => (props.hasResults ? "1.5rem" : "3rem")};
   font-weight: 600;
 `;
 
 function App() {
-  const [search, setSearch] = useState<string | null>(null);
+  const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<SearchResults | null>(null);
   const [loading, setLoading] = useState<boolean | null>(null);
 
@@ -68,19 +68,29 @@ function App() {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    if (search) fetchMovieData(search, value);
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    fetchMovieData(search, value);
   };
 
-  useEffect(() => {
-    console.log(results);
-  }, [results]);
+  const resetSearch = () => {
+    setResults(null);
+    setSearch("");
+  };
 
   return (
     <MainScreenContainer hasResults={!!results}>
       <ViewContainer>
-        <Header>OMDb Search API</Header>
-        <Search handleKeyDown={handleKeyDown} setSearch={setSearch} />
+        <Header hasResults={!!results}>OMDb Search API</Header>
+        <Search
+          handleKeyDown={handleKeyDown}
+          setSearch={setSearch}
+          resetSearch={resetSearch}
+          value={search}
+          displayReset={!!results || !!search}
+        />
       </ViewContainer>
 
       {loading ? (
@@ -89,7 +99,7 @@ function App() {
         results && (
           <>
             {results.Response === "True" ? (
-              <SearchResults Search={results.Search} />
+              <SearchResults Search={results.Search} quote={search} />
             ) : (
               <p>{results.Error}</p>
             )}
@@ -102,7 +112,7 @@ function App() {
           style={{ margin: "auto", marginBottom: "50px" }}
           count={Math.round(parseInt(results.totalResults) / 10)}
           shape="rounded"
-          onChange={handleChange}
+          onChange={handleChangePage}
         />
       )}
     </MainScreenContainer>

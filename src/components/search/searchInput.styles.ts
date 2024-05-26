@@ -26,3 +26,11 @@ export const SearchIcon = styled.img`
   top: 10px;
   width: 25px;
 `;
+
+export const ResetIcon = styled.img`
+  position: absolute;
+  right: 10px;
+  top: calc(50% - 18px);
+  width: 20px;
+  cursor: pointer;
+`;
