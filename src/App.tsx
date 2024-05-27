@@ -29,7 +29,7 @@ interface MainScreenContainerProps {
 const MainScreenContainer = styled.div<MainScreenContainerProps>`
   display: flex;
   flex-direction: column;
-  height: ${(props) => (props.hasResults ? "100vh" : "50vh")};
+  min-height: ${(props) => (props.hasResults ? "100vh" : "50vh")};
 `;
 
 const ViewContainer = styled.div`
@@ -54,6 +54,8 @@ function App() {
       const response = await axios.get(
         `https://www.omdbapi.com/?s=${title}&page=${page}&apikey=acd962bb`
       );
+      console.log(response.data);
+
       setResults(response.data);
     } catch (err) {
       console.log(err);

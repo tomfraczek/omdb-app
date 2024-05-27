@@ -34,3 +34,15 @@ export const ResetIcon = styled.img`
   width: 20px;
   cursor: pointer;
 `;
+
+export const AdvanceSearchButton = styled.button`
+  border: none;
+  background-color: transparent;
+  color: ${color.white};
+  margin-top: 8px;
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+`;

@@ -3,6 +3,7 @@ import {
   SearchInput,
   SearchIcon,
   ResetIcon,
+  AdvanceSearchButton,
 } from "./searchInput.styles";
 
 import searchIcon from "../../images/icons/search.svg";
@@ -34,6 +35,7 @@ export const Search = ({
         value={value}
       />
       {displayReset && <ResetIcon src={resetIcon} onClick={resetSearch} />}
+      <AdvanceSearchButton>Advance Search</AdvanceSearchButton>
     </SearchContainer>
   );
 };
