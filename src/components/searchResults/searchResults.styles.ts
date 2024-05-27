@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const ResultsContainer = styled.div`
   background-color: #fff;
   width: 80%;
-  margin: 0 auto;
+  margin: 0 auto 100px auto;
 `;
 
 export const PosterImage = styled.img`
@@ -11,7 +11,7 @@ export const PosterImage = styled.img`
   border-radius: 4px;
 `;
 
-export const FilterContainer = styled.div`
+export const FiltersContainer = styled.div`
   display: flex;
 `;
 

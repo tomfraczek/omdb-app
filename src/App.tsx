@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { color } from "./theme";
 
-import Pagination from "@mui/material/Pagination";
 import axios from "axios";
 import { Search } from "./components/search";
 import { SearchResults } from "./components/searchResults";
+import { Spinner } from "./components/spinner";
 
-interface Movie {
+export interface Movie {
   Title: string;
   Year: string;
   Type: string;
   imdbID: string;
+  Poster: string;
 }
 
 export interface SearchResults {
@@ -47,6 +48,7 @@ function App() {
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<SearchResults | null>(null);
   const [loading, setLoading] = useState<boolean | null>(null);
+  const [page, setPage] = useState<number | null>(null);
 
   const fetchMovieData = async (title: string, page: number = 1) => {
     setLoading(true);
@@ -74,11 +76,11 @@ function App() {
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
+    setPage(value);
     fetchMovieData(search, value);
   };
 
   const resetSearch = () => {
-    setResults(null);
     setSearch("");
   };
 
@@ -96,26 +98,22 @@ function App() {
       </ViewContainer>
 
       {loading ? (
-        <p>Loading...</p>
+        <Spinner />
       ) : (
         results && (
           <>
             {results.Response === "True" ? (
-              <SearchResults Search={results.Search} quote={search} />
+              <SearchResults
+                results={results}
+                quote={search}
+                handleChangePage={handleChangePage}
+                page={page}
+              />
             ) : (
               <p>{results.Error}</p>
             )}
           </>
         )
-      )}
-
-      {results && parseInt(results.totalResults) > 1 && (
-        <Pagination
-          style={{ margin: "auto", marginBottom: "50px" }}
-          count={Math.round(parseInt(results.totalResults) / 10)}
-          shape="rounded"
-          onChange={handleChangePage}
-        />
       )}
     </MainScreenContainer>
   );
