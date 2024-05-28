@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import { color } from "../../theme";
+import { device } from "../../theme/breakpoints";
 
 export const SearchContainer = styled.div`
   position: relative;
-  width: 50%;
+  width: 80%;
   height: 60px;
   margin: 0 auto;
+
+  @media ${device.tablet} {
+    width: 50%;
+  }
 `;
 
 export const SearchInput = styled.input`

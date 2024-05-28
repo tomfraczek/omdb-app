@@ -15,6 +15,7 @@ import {
   PosterContainer,
   DescriptionContainer,
   FilmPlot,
+  Notification,
   ColumnContainer,
   Cast,
   SectionTitle,
@@ -48,7 +49,7 @@ export const Film = () => {
   }
 
   if (!result) {
-    return <div>No data found.</div>;
+    return <Notification>No data found.</Notification>;
   }
 
   const { Actors, Director, Genre, Plot, Title, Type, Ratings, Poster, Year } =

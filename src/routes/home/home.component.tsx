@@ -80,6 +80,7 @@ export const Home = () => {
     setResults(data);
     setLoading(false);
   };
+
   return (
     <MainScreenContainer hasResults={!!results}>
       <ViewContainer>

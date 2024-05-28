@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MainScreenContainerProps } from "./home.types";
 import { color } from "../../theme";
+import { device } from "../../theme/breakpoints";
 
 export const MainScreenContainer = styled.div<MainScreenContainerProps>`
   display: flex;
@@ -14,15 +15,21 @@ export const ViewContainer = styled.div`
 `;
 
 export const Header = styled.h2<MainScreenContainerProps>`
-  color: white;
+  color: ${color.white};
   text-align: center;
-  font-size: ${(props) => (props.hasResults ? "1.5rem" : "3rem")};
+  font-size: ${(props) => (props.hasResults ? "1.5rem" : "2rem")};
   font-weight: 600;
+
+  @media ${device.tablet} {
+    font-size: ${(props) => (props.hasResults ? "1.5rem" : "3rem")};
+  }
 `;
 
 export const FiltersContainer = styled.div`
   display: flex;
   padding-left: 16px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 `;
 
 export const ResultsHead = styled.div`

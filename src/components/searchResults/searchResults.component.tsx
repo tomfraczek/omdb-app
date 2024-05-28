@@ -10,6 +10,7 @@ import clipboardIcon from "../../images/icons/clapperboard.png";
 import { ResultsContainer, PosterImage } from "./searchResults.styles";
 import { Link } from "react-router-dom";
 import { Movie } from "../../routes/home/home.types";
+import { useIsMobile } from "../../theme/styles";
 
 interface SearchResultsProps {
   results: {
@@ -26,17 +27,18 @@ export const SearchResults = ({
   handleChangePage,
   page,
 }: SearchResultsProps) => {
+  const isMobile = useIsMobile();
   const { Search, totalResults } = results;
   const pagesCount = Math.round(parseInt(results.totalResults) / 10);
 
   return (
     <ResultsContainer>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table aria-label="simple table">
           <TableBody>
             {Search.map((result) => (
               <TableRow
-                key={result.Title}
+                key={result.imdbID}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
@@ -53,8 +55,12 @@ export const SearchResults = ({
                   <Link to={`/film/${result.imdbID}`}>{result.Title}</Link>
                 </TableCell>
 
-                <TableCell>{result.Type}</TableCell>
-                <TableCell>{result.Year}</TableCell>
+                {!isMobile && (
+                  <>
+                    <TableCell>{result.Type}</TableCell>
+                    <TableCell>{result.Year}</TableCell>
+                  </>
+                )}
               </TableRow>
             ))}
           </TableBody>
