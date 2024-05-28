@@ -4,8 +4,9 @@ import { SearchResults } from "../../components/searchResults";
 import { Spinner } from "../../components/spinner";
 import { ToggleFilters } from "../../components/toggleFilters";
 import { YearSelect } from "../../components/yearSelect";
+import { fetchQueryData } from "../../utils/helpers";
+// import { SearchResultsType } from "./home.types";
 
-import { SearchResultsType } from "./home.types";
 import {
   MainScreenContainer,
   ViewContainer,
@@ -16,16 +17,24 @@ import {
   ResultsContainer,
   ErrorMessage,
 } from "./home.styles";
-import { fetchQueryData } from "../../utils/helpers";
+import { useSearchContext } from "../../context/searchContext";
 
 export const Home = () => {
-  const [query, setQuery] = useState<string>("");
-  const [search, setSearch] = useState<string>("");
-  const [results, setResults] = useState<SearchResultsType | null>(null);
+  const {
+    query,
+    setQuery,
+    search,
+    setSearch,
+    results,
+    setResults,
+    page,
+    setPage,
+    type,
+    setType,
+    year,
+    setYear,
+  } = useSearchContext();
   const [loading, setLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [type, setType] = useState<string>("");
-  const [year, setYear] = useState<number>(0);
 
   const handleKeyDown = async (
     event: React.KeyboardEvent<HTMLInputElement>

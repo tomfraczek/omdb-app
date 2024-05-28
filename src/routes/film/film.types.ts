@@ -12,4 +12,5 @@ export type Result = {
   Ratings: Ratings[];
   Title: string;
   Type: string;
+  Year: string;
 };

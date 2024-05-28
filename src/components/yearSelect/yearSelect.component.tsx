@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Select,
   MenuItem,
@@ -6,27 +6,35 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
+import { useSearchContext } from "../../context/searchContext";
 
 interface YearSelectProps {
   onYearChange: (year: number) => void;
 }
 
 export const YearSelect = ({ onYearChange }: YearSelectProps) => {
-  const [selectedYear, setSelectedYear] = useState<number>(0);
+  const { year, setYear } = useSearchContext();
+  const [selectedYear, setSelectedYear] = useState<number>(year || 0);
+
+  useEffect(() => {
+    setSelectedYear(year);
+  }, [year]);
 
   const handleYearChange = (event: SelectChangeEvent<number>) => {
-    const year = event.target.value as number;
-    setSelectedYear(year);
-    onYearChange(year);
+    const newYear = event.target.value as number;
+    setSelectedYear(newYear);
+    onYearChange(newYear);
+    setYear(newYear);
   };
 
   const generateYearOptions = () => {
+    const currentYear = new Date().getFullYear();
     const years = [
       <MenuItem key={0} value={0}>
         <em>None</em>
       </MenuItem>,
     ];
-    for (let year = new Date().getFullYear(); year >= 1888; year--) {
+    for (let year = currentYear; year >= 1888; year--) {
       years.push(
         <MenuItem key={year} value={year}>
           {year}

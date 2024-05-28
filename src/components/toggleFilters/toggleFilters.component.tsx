@@ -1,22 +1,29 @@
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchContext } from "../../context/searchContext";
 
 interface ToggleFiltersProps {
   onFilterChange: (type: string) => void;
 }
 
 export const ToggleFilters = ({ onFilterChange }: ToggleFiltersProps) => {
-  const [alignment, setAlignment] = useState("all");
+  const { type, setType } = useSearchContext();
+  const [alignment, setAlignment] = useState(type || "all");
+
+  useEffect(() => {
+    setAlignment(type || "all");
+  }, [type]);
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string
   ) => {
     if (newAlignment !== null) {
-      const type = newAlignment === "all" ? "" : newAlignment;
+      const newType = newAlignment === "all" ? "" : newAlignment;
       setAlignment(newAlignment);
-      onFilterChange(type);
+      onFilterChange(newType);
+      setType(newType);
     }
   };
 
@@ -28,7 +35,7 @@ export const ToggleFilters = ({ onFilterChange }: ToggleFiltersProps) => {
       onChange={handleChange}
       aria-label="Platform"
     >
-      <ToggleButton value="">All</ToggleButton>
+      <ToggleButton value="all">All</ToggleButton>
       <ToggleButton value="movie">Movies</ToggleButton>
       <ToggleButton value="series">Series</ToggleButton>
       <ToggleButton value="episode">Episodes</ToggleButton>

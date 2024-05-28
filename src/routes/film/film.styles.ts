@@ -11,6 +11,7 @@ export const FilmContainer = styled.div`
 export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding-top: 16px;
   margin-bottom: 16px;
 `;
 
@@ -90,6 +91,7 @@ export const Cast = styled.p`
 
 export const GoBackButton = styled.span`
   cursor: pointer;
+  font-weight: bold;
 
   &:hover {
     text-decoration: underline;

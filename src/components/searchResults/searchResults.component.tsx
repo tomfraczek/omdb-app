@@ -9,7 +9,7 @@ import clipboardIcon from "../../images/icons/clapperboard.png";
 
 import { ResultsContainer, PosterImage } from "./searchResults.styles";
 import { Link } from "react-router-dom";
-import { Movie } from "../../routes/home/home.component";
+import { Movie } from "../../routes/home/home.types";
 
 interface SearchResultsProps {
   results: {
