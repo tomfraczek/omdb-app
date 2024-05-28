@@ -14,8 +14,8 @@ export const ToggleFilters = ({ onFilterChange }: ToggleFiltersProps) => {
     newAlignment: string
   ) => {
     if (newAlignment !== null) {
-      setAlignment(newAlignment);
       const type = newAlignment === "all" ? "" : newAlignment;
+      setAlignment(newAlignment);
       onFilterChange(type);
     }
   };

@@ -1,5 +1,3 @@
-import { Movie } from "../../App";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,6 +8,8 @@ import Paper from "@mui/material/Paper";
 import clipboardIcon from "../../images/icons/clapperboard.png";
 
 import { ResultsContainer, PosterImage } from "./searchResults.styles";
+import { Link } from "react-router-dom";
+import { Movie } from "../../routes/home/home.component";
 
 interface SearchResultsProps {
   results: {
@@ -40,11 +40,19 @@ export const SearchResults = ({
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  <PosterImage
-                    src={result.Poster ? result.Poster : clipboardIcon}
-                  />
+                  <Link to={`/film/${result.imdbID}`}>
+                    <PosterImage
+                      src={
+                        result.Poster !== "N/A" ? result.Poster : clipboardIcon
+                      }
+                    />
+                  </Link>
                 </TableCell>
-                <TableCell>{result.Title}</TableCell>
+
+                <TableCell>
+                  <Link to={`/film/${result.imdbID}`}>{result.Title}</Link>
+                </TableCell>
+
                 <TableCell>{result.Type}</TableCell>
                 <TableCell>{result.Year}</TableCell>
               </TableRow>

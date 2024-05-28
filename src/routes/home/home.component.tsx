@@ -40,6 +40,7 @@ const ViewContainer = styled.div`
 
 const Header = styled.h2<MainScreenContainerProps>`
   color: white;
+  text-align: center;
   font-size: ${(props) => (props.hasResults ? "1.5rem" : "3rem")};
   font-weight: 600;
 `;
@@ -61,6 +62,10 @@ const ResultsContainer = styled.div`
   margin: 0 auto;
 `;
 
+export const SearchHeader = styled.h2`
+  text-align: center;
+`;
+
 export const Home = () => {
   const [query, setQuery] = useState<string>("");
   const [results, setResults] = useState<SearchResults | null>(null);
@@ -80,9 +85,6 @@ export const Home = () => {
     try {
       const typeParam = type ? `&type=${type}` : "";
       const yearParam = year ? `&y=${year}` : "";
-      console.log(
-        `https://www.omdbapi.com/?s=${query}&page=${page}${typeParam}${yearParam}&apikey=acd962bb`
-      );
       const response = await axios.get(
         `https://www.omdbapi.com/?s=${query}&page=${page}${typeParam}${yearParam}&apikey=acd962bb`
       );
@@ -140,7 +142,7 @@ export const Home = () => {
 
       {results && (
         <ResultsHead>
-          <h2>Search results for: {query}</h2>
+          <SearchHeader>Search results for: {query}</SearchHeader>
           <FiltersContainer>
             <ToggleFilters onFilterChange={handleTypeChange} />
             <YearSelect onYearChange={handleYearChange} />

@@ -7,7 +7,6 @@ import {
 
 import searchIcon from "../../images/icons/search.svg";
 import resetIcon from "../../images/icons/reset.svg";
-// import { AdvanceSearch } from "../advanceSearch";
 
 type SearchInputProps = {
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -35,7 +34,6 @@ export const Search = ({
         value={value}
       />
       {displayReset && <ResetIcon src={resetIcon} onClick={resetSearch} />}
-      {/* <AdvanceSearch /> */}
     </SearchContainer>
   );
 };
