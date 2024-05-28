@@ -20,22 +20,9 @@ import {
   Info,
   InfoContainer,
 } from "./film.styles";
-
-type Ratings = {
-  Source: string;
-  Value: string;
-};
-
-type Result = {
-  Actors: string;
-  Director: string;
-  Genre: string;
-  Plot: string;
-  Poster: string;
-  Ratings: Ratings[];
-  Title: string;
-  Type: string;
-};
+import { Result } from "./film.types";
+import { fetchQueryData } from "../../utils/helpers";
+import { Spinner } from "../../components/spinner";
 
 export const Film = () => {
   const navigate = useNavigate();
@@ -43,31 +30,21 @@ export const Film = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { filmId } = useParams<{ filmId: string }>();
 
-  const fetchQueryData = async () => {
-    setLoading(true);
-
-    try {
-      const response = await axios.get(
-        `https://www.omdbapi.com/?i=${filmId}&apikey=acd962bb`
-      );
-      console.log(response.data);
-
-      setResult(response.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (filmId) {
-      fetchQueryData();
-    }
+    const fetchFilmData = async () => {
+      setLoading(true);
+      if (filmId) {
+        const data = await fetchQueryData("", 1, undefined, undefined, filmId);
+        setResult(data as Result | null);
+      }
+      setLoading(false);
+    };
+
+    fetchFilmData();
   }, [filmId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (!result) {

@@ -16,6 +16,7 @@ export const HeaderContainer = styled.div`
 
 export const Header = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 `;
 
