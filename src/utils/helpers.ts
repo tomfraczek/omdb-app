@@ -16,7 +16,9 @@ export const fetchQueryData = async (
       : `&s=${query}&page=${page}${typeParam}${yearParam}`;
 
     const response = await axios.get(
-      `https://www.omdbapi.com/?${idParam}&apikey=acd962bb`
+      `https://www.omdbapi.com/?${idParam}&apikey=${
+        import.meta.env.VITE_OMDB_API_KEY
+      }`
     );
     return response.data;
   } catch (err) {
