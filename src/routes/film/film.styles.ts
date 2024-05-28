@@ -8,14 +8,30 @@ export const FilmContainer = styled.div`
   padding: 0 16px;
 `;
 
+export const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+`;
+
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+export const InfoContainer = styled.div`
+  display: flex;
   align-items: center;
+`;
+
+export const Info = styled.p`
+  text-transform: capitalize;
+  margin-right: 5px;
 `;
 
 export const FilmTitle = styled.h2`
   font-size: 2rem;
+  margin-bottom: 0;
 `;
 
 export const ScoreContainer = styled.div`
@@ -53,11 +69,28 @@ export const DescriptionContainer = styled.div`
 
 export const FilmPlot = styled.p`
   text-align: left;
+  margin: 0;
 `;
 
 export const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 16px;
 `;
 
-export const Cast = styled.p``;
+export const SectionTitle = styled.p`
+  margin: 0;
+  font-weight: bold;
+`;
+
+export const Cast = styled.p`
+  margin: 0;
+`;
+
+export const GoBackButton = styled.span`
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;

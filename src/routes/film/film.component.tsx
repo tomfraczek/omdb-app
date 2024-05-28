@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
   FilmContainer,
@@ -14,6 +14,11 @@ import {
   FilmPlot,
   ColumnContainer,
   Cast,
+  SectionTitle,
+  GoBackButton,
+  HeaderContainer,
+  Info,
+  InfoContainer,
 } from "./film.styles";
 
 type Ratings = {
@@ -33,6 +38,7 @@ type Result = {
 };
 
 export const Film = () => {
+  const navigate = useNavigate();
   const [result, setResult] = useState<Result | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const { filmId } = useParams<{ filmId: string }>();
@@ -73,9 +79,16 @@ export const Film = () => {
 
   return (
     <FilmContainer>
-      <Header>
-        <FilmTitle>{Title}</FilmTitle>
-      </Header>
+      <HeaderContainer>
+        <Header>
+          <FilmTitle>{Title}</FilmTitle>
+          <InfoContainer>
+            <Info>{Type},</Info>
+            <Info>{Genre}</Info>
+          </InfoContainer>
+        </Header>
+        <GoBackButton onClick={() => navigate(-1)}>Go Back</GoBackButton>
+      </HeaderContainer>
 
       <ContentContainer>
         <PosterContainer>
@@ -86,16 +99,18 @@ export const Film = () => {
           <ScoreContainer>
             {Ratings.map((rating, index) => (
               <RatingWrapper key={index}>
-                <p>{rating.Source}</p>
-                <p>{rating.Value}</p>
+                <SectionTitle>{rating.Source}</SectionTitle>
+                <Info>{rating.Value}</Info>
               </RatingWrapper>
             ))}
           </ScoreContainer>
 
-          <FilmPlot>{Plot}</FilmPlot>
+          <ColumnContainer>
+            <FilmPlot>{Plot}</FilmPlot>
+          </ColumnContainer>
 
           <ColumnContainer>
-            <p>Cast & Crew</p>
+            <SectionTitle>Cast & Crew</SectionTitle>
             <Cast>
               {Director}, {Actors}
             </Cast>
