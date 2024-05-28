@@ -84,7 +84,7 @@ export const Home = () => {
   return (
     <MainScreenContainer hasResults={!!results}>
       <ViewContainer>
-        <Header hasResults={!!results}>OMDb Search API</Header>
+        <Header hasResults={!!results}>MovieDB</Header>
         <Search
           handleKeyDown={handleKeyDown}
           setSearch={setQuery}

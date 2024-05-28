@@ -29,7 +29,11 @@ export const FiltersContainer = styled.div`
   display: flex;
   padding-left: 16px;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+
+  @media ${device.mobile} {
+    justify-content: flex-start;
+  }
 `;
 
 export const ResultsHead = styled.div`
