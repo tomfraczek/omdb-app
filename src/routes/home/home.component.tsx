@@ -1,115 +1,55 @@
 import { useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
 import { Search } from "../../components/search";
 import { SearchResults } from "../../components/searchResults";
 import { Spinner } from "../../components/spinner";
 import { ToggleFilters } from "../../components/toggleFilters";
 import { YearSelect } from "../../components/yearSelect";
-import { color } from "../../theme";
 
-export interface Movie {
-  Title: string;
-  Year: string;
-  Type: string;
-  imdbID: string;
-  Poster: string;
-}
-
-export interface SearchResults {
-  Search: Movie[];
-  totalResults: string;
-  Response: string;
-  Error?: string;
-}
-
-interface MainScreenContainerProps {
-  hasResults: boolean;
-}
-
-const MainScreenContainer = styled.div<MainScreenContainerProps>`
-  display: flex;
-  flex-direction: column;
-  min-height: ${(props) => (props.hasResults ? "100vh" : "50vh")};
-`;
-
-const ViewContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Header = styled.h2<MainScreenContainerProps>`
-  color: white;
-  text-align: center;
-  font-size: ${(props) => (props.hasResults ? "1.5rem" : "3rem")};
-  font-weight: 600;
-`;
-
-export const FiltersContainer = styled.div`
-  display: flex;
-  padding-left: 16px;
-`;
-
-const ResultsHead = styled.div`
-  background-color: ${color.white};
-  width: 80%;
-  margin: 0 auto;
-`;
-
-const ResultsContainer = styled.div`
-  background-color: ${color.white};
-  width: 80%;
-  margin: 0 auto;
-`;
-
-export const SearchHeader = styled.h2`
-  text-align: center;
-`;
+import { SearchResultsType } from "./home.types";
+import {
+  MainScreenContainer,
+  ViewContainer,
+  Header,
+  ResultsHead,
+  SearchHeader,
+  FiltersContainer,
+  ResultsContainer,
+  ErrorMessage,
+} from "./home.styles";
+import { fetchQueryData } from "../../utils/helpers";
 
 export const Home = () => {
   const [query, setQuery] = useState<string>("");
-  const [results, setResults] = useState<SearchResults | null>(null);
+  const [search, setSearch] = useState<string>("");
+  const [results, setResults] = useState<SearchResultsType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [type, setType] = useState<string>("");
   const [year, setYear] = useState<number>(0);
 
-  const fetchQueryData = async (
-    query: string,
-    page: number = 1,
-    type?: string,
-    year?: number
+  const handleKeyDown = async (
+    event: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    setLoading(true);
-
-    try {
-      const typeParam = type ? `&type=${type}` : "";
-      const yearParam = year ? `&y=${year}` : "";
-      const response = await axios.get(
-        `https://www.omdbapi.com/?s=${query}&page=${page}${typeParam}${yearParam}&apikey=acd962bb`
-      );
-      setResults(response.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
+    if (event.key === "Enter") {
+      const value = (event.target as HTMLInputElement).value;
+      setQuery(value);
+      setSearch(value);
+      setLoading(true);
+      const data = await fetchQueryData(value);
+      setResults(data);
       setLoading(false);
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const value = (event.target as HTMLInputElement).value;
-      setQuery(value);
-      fetchQueryData(value);
-    }
-  };
-
-  const handleChangePage = (
+  const handleChangePage = async (
     event: React.ChangeEvent<unknown>,
     page: number
   ) => {
     setPage(page);
-    fetchQueryData(query, page, type, year);
+    setLoading(true);
+    const data = await fetchQueryData(query, page, type, year);
+    setResults(data);
+    setLoading(false);
   };
 
   const resetSearch = () => {
@@ -117,16 +57,21 @@ export const Home = () => {
     setResults(null);
   };
 
-  const handleTypeChange = (newType: string) => {
+  const handleChangeType = async (newType: string) => {
     setType(newType);
-    fetchQueryData(query, 1, newType, year);
+    setLoading(true);
+    const data = await fetchQueryData(query, 1, newType, year);
+    setResults(data);
+    setLoading(false);
   };
 
-  const handleYearChange = (newYear: number) => {
+  const handleYearChange = async (newYear: number) => {
     setYear(newYear);
-    fetchQueryData(query, 1, type, newYear);
+    setLoading(true);
+    const data = await fetchQueryData(query, 1, type, newYear);
+    setResults(data);
+    setLoading(false);
   };
-
   return (
     <MainScreenContainer hasResults={!!results}>
       <ViewContainer>
@@ -142,9 +87,9 @@ export const Home = () => {
 
       {results && (
         <ResultsHead>
-          <SearchHeader>Search results for: {query}</SearchHeader>
+          <SearchHeader>Search results for: {search}</SearchHeader>
           <FiltersContainer>
-            <ToggleFilters onFilterChange={handleTypeChange} />
+            <ToggleFilters onFilterChange={handleChangeType} />
             <YearSelect onYearChange={handleYearChange} />
           </FiltersContainer>
         </ResultsHead>
@@ -163,7 +108,7 @@ export const Home = () => {
                 page={page}
               />
             ) : (
-              <p>{results.Error}</p>
+              <ErrorMessage>{results.Error}</ErrorMessage>
             )}
           </ResultsContainer>
         )
