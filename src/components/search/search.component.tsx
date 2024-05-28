@@ -3,7 +3,7 @@ import {
   SearchInput,
   SearchIcon,
   ResetIcon,
-} from "./searchInput.styles";
+} from "./search.styles";
 
 import searchIcon from "../../images/icons/search.svg";
 import resetIcon from "../../images/icons/reset.svg";
@@ -33,7 +33,13 @@ export const Search = ({
         placeholder="Search"
         value={value}
       />
-      {displayReset && <ResetIcon src={resetIcon} onClick={resetSearch} />}
+      {displayReset && (
+        <ResetIcon
+          src={resetIcon}
+          onClick={resetSearch}
+          aria-label="reset icon"
+        />
+      )}
     </SearchContainer>
   );
 };

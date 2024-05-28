@@ -1,1 +1,1 @@
-export { Search } from "./searchInput.component";
+export { Search } from "./search.component";

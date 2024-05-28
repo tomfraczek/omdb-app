@@ -16,7 +16,7 @@ export const ToggleFilters = ({ onFilterChange }: ToggleFiltersProps) => {
   }, [type]);
 
   const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _: React.MouseEvent<HTMLElement>,
     newAlignment: string
   ) => {
     if (newAlignment !== null) {

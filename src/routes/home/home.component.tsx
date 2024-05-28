@@ -5,7 +5,6 @@ import { Spinner } from "../../components/spinner";
 import { ToggleFilters } from "../../components/toggleFilters";
 import { YearSelect } from "../../components/yearSelect";
 import { fetchQueryData } from "../../utils/helpers";
-// import { SearchResultsType } from "./home.types";
 
 import {
   MainScreenContainer,
@@ -51,7 +50,7 @@ export const Home = () => {
   };
 
   const handleChangePage = async (
-    event: React.ChangeEvent<unknown>,
+    _: React.ChangeEvent<unknown>,
     page: number
   ) => {
     setPage(page);
